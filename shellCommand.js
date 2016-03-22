@@ -1,35 +1,19 @@
 #!/usr/bin/env node
-var spBrander = require("./index");
+var engine = require("./engine");
 var program = require('commander');
-var path = require("path");
 
 program
-	.version('0.0.1')
+	.version('0.0.2')
 	.option('-u, --url <url>', 'REQUIRED - The SharePoint online url')
-	.option('-f, --file <file>', 'REQUIRED - The relative path to the file')
-	.option('-r, --remove', 'Remove the specified CustomAction ScriptLink name at the targeted url')
-	.option('-n, --name <>', 'Optional - Create the CustomAction with a specific name')
+	.option('-f, --file <file>', 'REQUIRED - The path(relative or absolute or url) to the file')
 	.parse(process.argv);
 
-var name = typeof program.name === 'string' ? program.name : "";
-if (program.file) {
-	var extension = path.extname(program.file);
-
-	var opts = {
-		url: program.url,
-		file: program.file,
-		name: name
+// A file and a sharepoint url were passed in
+if (program.file && program.url) {
+	// the file is a url, add the script action (don't inject)
+	if (program.file.toLowerCase().indexOf("http:") === 0) {
+		engine.site(program.url).addScriptAction(program.file);
+	} else {
+		engine.site(program.url).inject(program.file);
 	}
-
-	if (extension === ".js") {
-		spBrander.addScriptLink(opts);
-	} else if (extension === ".css") {
-		spBrander.addStylesheet(opts);
-	}
-
-} else if (program.remove) {
-	spBrander.removeScriptLink({
-		url: program.url,
-		name: name
-	});
 }

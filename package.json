@@ -1,6 +1,6 @@
 {
   "name": "spbrander",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Command line tools for SharePoint development",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,7 @@
     "live-server": "^0.9.1",
     "ngrok": "^0.2.2",
     "node-powershell": "^1.1.0",
-    "open": "0.0.5"
+    "open": "0.0.5",
+    "request-promise": "^2.0.0"
   }
 }
