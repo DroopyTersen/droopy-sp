@@ -3,5 +3,4 @@
 
 ConnectToSharePoint -siteUrl $args[0]
 
-Write-Host "Removing Script link..."
-Remove-SPOJavaScriptLink -Name $args[1] -Force
+InjectScriptToWikiPage -serverRelativePageUrl $args[1] -scriptUrl $args[2] -webPartTitle $args[3]

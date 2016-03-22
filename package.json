@@ -16,7 +16,6 @@
   "license": "ISC",
   "dependencies": {
     "commander": "^2.9.0",
-    "droopy-server": "^1.0.2",
     "live-server": "^0.9.1",
     "ngrok": "^0.2.2",
     "node-powershell": "^1.1.0",

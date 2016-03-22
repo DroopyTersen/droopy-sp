@@ -1,0 +1,18 @@
+<webParts>
+  <webPart xmlns="http://schemas.microsoft.com/WebPart/v3">
+    <metaData>
+      <type name="Microsoft.SharePoint.WebPartPages.ScriptEditorWebPart, Microsoft.SharePoint, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" />
+      <importErrorMessage>Cannot import this Web Part.</importErrorMessage>
+    </metaData>
+    <data>
+      <properties>
+        <property name="Content" type="string">
+          &lt;div id=&#39;{{ScriptWebPartTitle}}-container&#39;&gt;&lt;/div&gt;
+          &lt;script src=&#39;{{ScriptUrl}}&#39;&gt;&lt;/script&gt;
+        </property>
+        <property name="Title" type="string">{{ScriptWebPartTitle}}</property>
+		<property name="ChromeType" type="chrometype">None</property>
+      </properties>
+    </data>
+  </webPart>
+</webParts>

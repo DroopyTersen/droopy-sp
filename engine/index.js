@@ -1,3 +1,4 @@
 module.exports = {
-	site: require("./site")
+	site: require("./site"),
+	page: require("./page")
 };

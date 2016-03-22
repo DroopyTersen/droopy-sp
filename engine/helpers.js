@@ -22,15 +22,15 @@ var getStylesheetBlock = exports.getStylesheetBlock = function(cssUrl) {
 var getFileUrl = exports.getFileUrl = function(url, file) {
 	var fileUrl = "";
 	var fileInfo = path.parse(file);
+	console.log(fileInfo);
 	if (path.isAbsolute(file) ){
 		fileUrl = "/" + fileInfo.base;
 	} else {
 		fileUrl = 	fileInfo.dir && fileInfo.dir !== "."
-						? fileInfo.dir + fileInfo.base
+						? fileInfo.dir + "/" + fileInfo.base
 						: "/" + fileInfo.base
 	}
-
-	console.log(fileInfo);
+	console.log(fileUrl);
 	return url.replace("http:/", "https:/") + fileUrl;
 };
 
