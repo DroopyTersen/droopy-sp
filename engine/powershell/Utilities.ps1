@@ -13,6 +13,18 @@ Function InjectScriptToWikiPage($serverRelativePageUrl, $content, $webPartTitle,
     Add-SPOWebPartToWikiPage -ServerRelativePageUrl $serverRelativePageUrl -Xml $webPartXml -Row $row -Column $column
 }
 
+Function InjectHtmlToWikiPage($serverRelativePageUrl, $contentLink, $webPartTitle, $row = 1, $column = 1)
+{
+    #$webPartXml = (Get-Content -Path .\ScriptWebPartTemplate.webpart -Raw)
+    $path2 = $path + "\ContentEditor.webpart"
+    Write-Host $path2
+    $webPartXml = (Get-Content -Path $path2 -Raw)
+    $webPartXml = $webPartXml -Replace "{{ContentLink}}", $contentLink
+    $webPartXml = $webPartXml -Replace "{{WebPartTitle}}", $webPartTitle
+    
+    Add-SPOWebPartToWikiPage -ServerRelativePageUrl $serverRelativePageUrl -Xml $webPartXml -Row $row -Column $column
+}
+
 Function InjectScriptToPublishingPage($serverRelativePageUrl, $scriptUrl, $webPartTitle, $zoneId = "Header", $zoneIndex = 1)
 {
     #$webPartXml = (Get-Content -Path .\ScriptWebPartTemplate.webpart -Raw)

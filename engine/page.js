@@ -6,12 +6,12 @@ var escapeHtml = require('escape-html');
 var fs = require("fs");
 var urlUtil = require("url");
 
-var page = function(siteUrl, pageUrl) {
+var page = function (siteUrl, pageUrl) {
 	var url = siteUrl;
 	var page = pageUrl;
 
 
-	var inject = function(filepath, name, opts) {
+	var inject = function (filepath, name, opts) {
 		if (!filepath) throw "Invalid options. You need to pass filepath. engine.page(<siteUrl>, <pageUrl>).inject(<filepath>, [opts])"
 		opts = opts || {};
 		opts.name = name;
@@ -23,27 +23,40 @@ var page = function(siteUrl, pageUrl) {
 		});
 	};
 
-	var getScriptContent = function(fileUrl, opts, done) {
-				// based on file type, figure out what to do
-		var extension = path.extname(fileUrl);
-		if (extension === ".js") {
-			var html = `
-				<div id='${opts.name}-container'></div>
-				<script type='text/javascript' src='${fileUrl}'></script>
-			`;
-			done('"' + escapeHtml(html.trim()) + '"');			
-		} else if (extension === ".html" && opts.file) {
-			fs.readFile(opts.file, 'utf8', (err, data) => {
+	var getScriptContent = function (fileUrl, opts) {
+		var html = `
+			<div id='${opts.name}-container'></div>
+			<script type='text/javascript' src='${fileUrl}'></script>
+		`;
+		return '"' + escapeHtml(html.trim()) + '"';
+		// } else if (extension === ".html" && opts.file) {
+		// 	fs.readFile(opts.file, 'utf8', (err, data) => {
+		// 		var urlInfo = urlUtil.parse(fileUrl);
+		// 		var host = "https://" + urlInfo.host;
+		// 		data = data.replace(/\{\{host\}\}/g, host);
+		// 		done('"' + escapeHtml(data) + '"');	
+		// 	});
+		// }
+	};
+
+	var updateHtmlReferences = function (fileUrl, opts, done) {
+		if (opts.file) {
+			fs.readFile(opts.file, 'utf8', function (err, data) {
+				if (err) return console.log(err);
 				var urlInfo = urlUtil.parse(fileUrl);
 				var host = "https://" + urlInfo.host;
-				data = data.replace(/\{\{host\}\}/g, host);
-				done('"' + escapeHtml(data) + '"');	
+				var result = data.replace(/(https:\/\/\w+.ngrok.io|\{\{host\}\})/g, host);
+
+				fs.writeFile(opts.file, result, 'utf8', function (err) {
+					if (err) return console.log(err);
+					done(result);
+				});
 			});
 		}
 	};
 	
-	var addWikiWebPart = function(fileUrl, opts) {
-		if (!fileUrl ) throw "Invalid options. You need to pass fileUrl ";
+	var addWikiWebPart = function (fileUrl, opts) {
+		if (!fileUrl) throw "Invalid options. You need to pass fileUrl ";
 		opts = opts || {};
 		opts.name = opts.name || "droopy-sp-webpart";
 
@@ -51,21 +64,25 @@ var page = function(siteUrl, pageUrl) {
 		if (opts.open !== false) opts.open = true;
 
 		console.log("Adding Script Editor referencing " + fileUrl);
-		getScriptContent(fileUrl, opts, (content) => {
-			helpers.runPowershellScript("AddScriptEditor.ps1", [url, page, content, opts.name], () =>{
+		var extension = path.extname(fileUrl);
+		if (extension === ".js") {
+			var content = getScriptContent(fileUrl, opts);
+
+			helpers.runPowershellScript("AddScriptEditor.ps1", [url, page, content, opts.name], () => {
 				if (opts.open) open(url + "/" + page);
 			})
-
-			if (opts.cleanup) {
-				var removeOpts = { url: opts.url, exit: true, name: opts.name, page: page };
-				// process.on('SIGINT', removeScriptAction.bind(null, removeOpts));
-			}			
-		});
+		} else if (extension == ".html") {
+			updateHtmlReferences(fileUrl, opts, () => {
+				helpers.runPowershellScript("AddHtmlWebpart.ps1", [url, page, fileUrl, opts.name], () => {
+					if (opts.open) open(url + "/" + page);
+				});				
+			});
+		}
 
 	}
 
 	//alias inject as debug
-	return {inject, debug: inject, addWikiWebPart}
+	return { inject, debug: inject, addWikiWebPart }
 };
 
 module.exports = page;
