@@ -22,7 +22,6 @@ var getStylesheetBlock = exports.getStylesheetBlock = function(cssUrl) {
 var getFileUrl = exports.getFileUrl = function(url, file) {
 	var fileUrl = "";
 	var fileInfo = path.parse(file);
-	console.log(fileInfo);
 	if (path.isAbsolute(file) ){
 		fileUrl = "/" + fileInfo.base;
 	} else {
@@ -30,11 +29,12 @@ var getFileUrl = exports.getFileUrl = function(url, file) {
 						? fileInfo.dir + "/" + fileInfo.base
 						: "/" + fileInfo.base
 	}
-	console.log(fileUrl);
+	if (fileUrl[0] === ".") fileUrl = fileUrl.substr(1);
 	return url.replace("http:/", "https:/") + fileUrl;
 };
 
 var runPowershellScript = exports.runPowershellScript = function(ps1Name, args, done) {
+	console.log(args);
 	var psCommand = new PowerShell(`${__dirname}\\powershell\\${ps1Name} ${args.join(" ")}`);
 	psCommand.on('output', data => console.log(data));
 	psCommand.on('end', () => {

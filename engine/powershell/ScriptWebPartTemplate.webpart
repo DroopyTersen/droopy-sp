@@ -7,8 +7,7 @@
     <data>
       <properties>
         <property name="Content" type="string">
-          &lt;div id=&#39;{{ScriptWebPartTitle}}-container&#39;&gt;&lt;/div&gt;
-          &lt;script src=&#39;{{ScriptUrl}}&#39;&gt;&lt;/script&gt;
+          {{Content}}
         </property>
         <property name="Title" type="string">{{ScriptWebPartTitle}}</property>
 		<property name="ChromeType" type="chrometype">None</property>
