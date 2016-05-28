@@ -7,7 +7,6 @@ var addScriptBlock = exports.addScriptBlock = function(opts, block) {
 };
 
 var addScriptLink = exports.addScriptLink = function(opts, block) {
-	console.log("here");
 	opts.type = "link";
 	addScriptAction(opts, block)
 };
@@ -25,7 +24,6 @@ var removeScriptAction = exports.removeScriptAction = function(opts, done) {
 
 //Allws adding a ScriptLink or a ScriptBlock
 var addScriptAction = exports.addScriptAction = function(opts, script) {
-	console.log("here");
 	// Handle defaults
 	opts.type = opts.type || "Link";
 	opts.name = opts.name || "droopy-sp"
