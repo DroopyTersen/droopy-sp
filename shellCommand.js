@@ -5,15 +5,16 @@ var program = require('commander');
 program
 	.version('0.0.2')
 	.option('-u, --url <url>', 'REQUIRED - The SharePoint online url')
-	.option('-f, --file <file>', 'REQUIRED - The path(relative or absolute or url) to the file')
+	.option('-p, --path <file>', 'REQUIRED - The url or local filepath to the file')
+	.option('-a, --action <action>', 'REQUIRED - "inject" or "upload"')
+	.option('-f, --folder <folder>', 'The site relative folder to upload the file to.')
+	.option('-n, --name <name>', 'Name of the custom action')
 	.parse(process.argv);
 
 // A file and a sharepoint url were passed in
 if (program.file && program.url) {
-	// the file is a url, add the script action (don't inject)
-	if (program.file.toLowerCase().indexOf("http:") === 0) {
-		engine.site(program.url).addScriptAction(program.file);
-	} else {
-		engine.site(program.url).inject(program.file);
-	}
+	program.action = program.action || "inject";
+	program.folder = program.folder || "Style Library/_spbrander";
+	program.name = program.name || "spbrander-cli";
+	engine.site(program.url)[program.action](program.file, program.folder);
 }

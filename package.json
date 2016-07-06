@@ -1,10 +1,11 @@
 {
   "name": "spbrander",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "Command line tools for SharePoint development",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
+    "test:watch": "mocha --watch",
     "debug": "node test/run.js"
   },
   "keywords": [
@@ -18,8 +19,6 @@
   "dependencies": {
     "commander": "^2.9.0",
     "droopy-server": "^1.0.5",
-    "edge": "^5.0.0",
-    "escape-html": "^1.0.3",
     "live-server": "^0.9.1",
     "ngrok": "^0.2.2",
     "node-powershell": "^1.1.0",
@@ -28,6 +27,8 @@
     "skyline-sppowershell": "^1.0.4"
   },
   "devDependencies": {
-    "edge-ps": "0.1.0-pre"
+    "chai": "^3.5.0",
+    "edge-ps": "0.1.0-pre",
+    "mocha": "^2.5.3"
   }
 }
