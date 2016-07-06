@@ -1,6 +1,6 @@
 {
   "name": "spbrander",
-  "version": "1.0.9",
+  "version": "1.0.11",
   "description": "Command line tools for SharePoint development",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
     "droopy-server": "^1.0.5",
     "live-server": "^0.9.1",
     "ngrok": "^0.2.2",
-    "node-powershell": "^1.1.0",
+    "node-powershell": "1.1.0",
     "open": "0.0.5",
     "request-promise": "^2.0.0",
     "skyline-sppowershell": "^1.0.4"

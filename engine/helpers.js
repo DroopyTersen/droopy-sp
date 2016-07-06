@@ -1,18 +1,14 @@
 var path = require("path");
 var PowerShell = require('node-powershell');
 
-var getFileUrl = exports.getFileUrl = function(url, file) {
-	var fileUrl = "";
-	var fileInfo = path.parse(file);
-	if (path.isAbsolute(file) ){
-		fileUrl = "/" + fileInfo.base;
-	} else {
-		fileUrl = 	fileInfo.dir && fileInfo.dir !== "."
-						? fileInfo.dir + "/" + fileInfo.base
-						: "/" + fileInfo.base
-	}
-	if (fileUrl[0] === ".") fileUrl = fileUrl.substr(1);
-	return url.replace("http:/", "https:/") + fileUrl;
+var getFileUrl = exports.getFileUrl = function(filepath, siteUrl, folder) {
+	var filename = path.basename(filepath);
+	if (folder.startsWith("/")) folder = folder.substr(1);
+	return `${siteUrl}/${folder}/${filename}`
+};
+
+var isUrl = exports.isUrl = function(filepath) {
+	return filepath.startsWith("http");
 };
 
 var getFilePath = exports.getFilePath = function(file, siteUrl) {
