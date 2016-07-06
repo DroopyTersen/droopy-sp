@@ -15,9 +15,20 @@ var getFileUrl = exports.getFileUrl = function(url, file) {
 	return url.replace("http:/", "https:/") + fileUrl;
 };
 
-var getFilePath = exports.getFilePath = function(file) {
-	return process.cwd() + file;
-}
+var getFilePath = exports.getFilePath = function(file, siteUrl) {
+	// if its a URL or an absolute filepath
+	if (file.startsWith("http") || !file.startsWith("/") && path.isAbsolute(file)) {
+		return file;
+	}
+	// if its a relative filepath
+	if (file.startsWith("./")) {
+		return path.format({dir: process.cwd(), base: path.normalize(file)});
+	}
+	// Assume its a site relative url
+	if (file.startsWith("/")) file = file.substr(1);
+	return `${siteUrl}/${file}`
+};
+
 exports.runPowershellBlock = function(scriptBlock, done) {
 	return new Promise((resolve, reject) => {
 		var psCommand = new PowerShell(scriptBlock);
